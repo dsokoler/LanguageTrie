@@ -3,12 +3,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class LanguageTrie {
 	static Node root;
 	int numberOfWords;
+	
+	static String longest;
 	
 	protected LanguageTrie (File file) {
 		root = new Node();
@@ -23,9 +26,15 @@ public class LanguageTrie {
     	try(BufferedReader reader = new BufferedReader(new FileReader(f))) {
     		String line = reader.readLine();
 			
+    		t.longest = line;
+    		
     		while (line != null) {
         		line.toLowerCase();
-    			
+        		
+    			if(line.length() > t.longest.length()) {
+    				t.longest = line;
+    			}
+        		
     			char[] letters = line.toCharArray();
     			
     			if (letters.length == 0 || letters[0] == 10) {
@@ -128,6 +137,33 @@ public class LanguageTrie {
     	
     	for (Node child : root.children) {
     		printTrie(child, spaces + 1);
+    	}
+    }
+    
+    public static ArrayList<String> findWordsOfLength(int size) {
+    	ArrayList<String> wordList = new ArrayList<String>();
+    	String currentWord = "";
+    	
+    	for(Node child : root.children) {
+        	LanguageTrie.findWordsOfLength(child, wordList, size, 0, currentWord);
+    	}
+    	
+    	return wordList;
+    }
+    
+    public static void findWordsOfLength(Node node, ArrayList<String> wordList, int size, int depth, String currentWord) {
+    	currentWord += node.letter;
+    	
+    	int wordSize = currentWord.length();
+    	if (wordSize == size && node.endOfWord) {
+    		wordList.add(currentWord);
+    		return;
+    	}
+    	else if (wordSize > size) return;
+    	else {
+    		for (Node child : node.children){
+    			findWordsOfLength(child, wordList, size, depth + 1, currentWord);
+    		}
     	}
     }
 }

@@ -101,7 +101,8 @@ public class Main {
 					break;
 					
 				case 3: 
-					
+					System.out.println();
+					System.out.println("Longest word: \"" + t.longest + "\"");
 					
 					break;
 					
@@ -159,8 +160,18 @@ public class Main {
 					break;
 					
 				case 6:
+					System.out.println("Please enter a size:");
+					Scanner scan = new Scanner(System.in);
+					int size = scan.nextInt();
+					ArrayList<String> wordList = LanguageTrie.findWordsOfLength(size);
 					
+					System.out.println();
+					System.out.println("All words of size " + size + ":");
 					
+					for(String wordOfSize : wordList) {
+						System.out.printf("\t%s\n", wordOfSize);
+					}
+					System.out.println();
 					break;
 					
 				case 10:
