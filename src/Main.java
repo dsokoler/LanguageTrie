@@ -1,4 +1,10 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +35,32 @@ public class Main {
 		}
 	}
 	
+	public static boolean isAlpha(String name) {
+	    return name.matches("[a-zA-Z]+");
+	}
 	
+	public static void removeNonCharacters(File inputFile) {
+		File tempFile = new File("myTempFile.txt");
+
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+			String currentLine;
+
+			while((currentLine = reader.readLine()) != null) {
+		    	if (isAlpha(currentLine)) {
+		    		writer.write(currentLine + System.getProperty("line.separator"));
+		    	}
+			}
+			writer.close(); 
+			reader.close(); 
+			boolean successful = tempFile.renameTo(inputFile);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public static void main(String[] args) {
 		System.out.println("Please enter the name of the file to read from");
@@ -44,23 +75,19 @@ public class Main {
 		System.out.println();
 		
 		File file = new File(fileName);
-		t = LanguageTrie.newTrie(file);
+		//removeNonCharacters(file);
 		
-		//printTrie(t);
-		//System.out.println();
-		
-		//printSize(t.root);
-		//System.out.println();
-		
+		t = LanguageTrie.newTrie(file);		
 		
 		while(true) {
 			System.out.println("Please Select an Option:");
 			System.out.println(" 1. Check if a word exists");
 			System.out.println(" 2. Display a distribution of all letters in this language");
-			System.out.println(" 3. Display the longest word in this language");
-			System.out.println(" 4. Display the size of this language");
-			System.out.println(" 5. Display the letters most likely to come after a certain letter");
-			System.out.println(" 6. Display all words of a certain length");
+			System.out.println(" 3. Print the longest word in this language");
+			System.out.println(" 4. Calculate the size of this language");
+			System.out.println(" 5. Show the letters most likely to come after a certain letter");
+			System.out.println(" 6. List all words of a certain length");
+			System.out.println(" 7. Find the number of words in this language");
 			System.out.println("10. Exit Program");
 			System.out.println();
 
@@ -172,6 +199,11 @@ public class Main {
 						System.out.printf("\t%s\n", wordOfSize);
 					}
 					System.out.println();
+					break;
+				
+				case 7: 
+					System.out.println();
+					System.out.println("Number of Words: " + t.numberOfWords);
 					break;
 					
 				case 10:

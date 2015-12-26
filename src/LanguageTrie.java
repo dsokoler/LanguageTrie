@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class LanguageTrie {
 	static Node root;
-	int numberOfWords;
+	int numberOfWords = 0;
 	
 	static String longest;
 	
@@ -42,6 +42,7 @@ public class LanguageTrie {
     				continue;
     			}
     			t.addWordToTrie(LanguageTrie.root, letters, 0);
+    			t.numberOfWords++;
     			
     			line = reader.readLine();
     		}
